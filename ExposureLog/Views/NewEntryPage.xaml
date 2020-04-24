@@ -7,21 +7,18 @@
              x:Class="ExposureLog.Views.NewEntryPage"
              Title="New Entry">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save"/>
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <TableView Intent="Form">
             <TableView.Root>
                 <TableSection>
-                    <EntryCell Label="Title" />
-                    <EntryCell Label="Latitude"
-                        Keyboard="Numeric" />
-                    <EntryCell Label="Longitude"
-                        Keyboard="Numeric" />
-                    <EntryCell Label="Date" />
-                    <EntryCell Label="Risk Rating"
-                        Keyboard="Numeric" />
-                    <EntryCell Label="Notes" />
+                    <EntryCell x:Name="title" Label="Title" Text="{Binding Title}"/>
+                    <EntryCell x:Name="latitude" Label="Latitude" Text="{Binding Latitude}" Keyboard="Numeric" />
+                    <EntryCell x:Name="longitude" Label="Longitude" Text="{Binding Longitude}" Keyboard="Numeric" />
+                    <EntryCell x:Name="date" Label="Date" Text="{Binding Date, StringFormat='{0:d}'}" />
+                    <EntryCell x:Name="riskRating" Label="Risk Rating" Text="{Binding RiskRating}" Keyboard="Numeric" />
+                    <EntryCell x:Name="notes" Label="Notes" Text="{Binding Notes}"/>
                 </TableSection>
             </TableView.Root>
         </TableView>

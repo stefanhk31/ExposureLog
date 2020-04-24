@@ -12,6 +12,7 @@
     <ContentPage.Content>
         <CollectionView x:Name="exposures"
                         SelectionMode="Single"
+                        ItemsSource="{Binding LogEntries}"
                         SelectionChanged="Exposures_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
