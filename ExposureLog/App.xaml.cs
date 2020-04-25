@@ -1,4 +1,6 @@
-﻿using ExposureLog.Views;
+﻿using ExposureLog.Services;
+using ExposureLog.ViewModels;
+using ExposureLog.Views;
 using Xamarin.Forms;
 
 namespace ExposureLog
@@ -8,8 +10,13 @@ namespace ExposureLog
         public App()
         {
             InitializeComponent();
-
-            MainPage = MainPage = new NavigationPage(new MainPage());
+            var mainPage = new NavigationPage(new MainPage());
+            var navService = DependencyService.Get<INavService>() as NavService;
+            navService.Navigation = mainPage.Navigation;
+            navService.RegisterViewMapping(typeof(MainViewModel), typeof(MainPage));
+            navService.RegisterViewMapping(typeof(DetailViewModel), typeof(DetailPage));
+            navService.RegisterViewMapping(typeof(NewEntryViewModel), typeof(NewEntryPage));
+            MainPage = mainPage;
         }
 
         protected override void OnStart()

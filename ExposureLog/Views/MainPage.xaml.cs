@@ -1,4 +1,5 @@
 ﻿using ExposureLog.Models;
+using ExposureLog.Services;
 using ExposureLog.ViewModels;
 using System;
 using System.Linq;
@@ -10,26 +11,19 @@ namespace ExposureLog.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
+        MainViewModel ViewModel => BindingContext as MainViewModel;
+
+
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel();
+            BindingContext = new MainViewModel(DependencyService.Get<INavService>());
         }
 
-        void New_Clicked(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            Navigation.PushAsync(new NewEntryPage());
-        }
-
-        async void Exposures_SelectionChanged(object s, SelectionChangedEventArgs e)
-        {
-            var exposure = (ExposureLogEntry)e.CurrentSelection.FirstOrDefault();
-            if (exposure != null)
-            {
-                await Navigation.PushAsync(new DetailPage(exposure));
-            }
-            // Clear selection 
-            exposures.SelectedItem = null;
+            base.OnAppearing();
+            ViewModel?.Init();
         }
     }
 }

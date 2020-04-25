@@ -1,9 +1,9 @@
 ﻿using ExposureLog.Models;
-
+using ExposureLog.Services;
 
 namespace ExposureLog.ViewModels
 {
-    class DetailViewModel : BaseViewModel
+    class DetailViewModel : BaseViewModel<ExposureLogEntry>
     {
         private ExposureLogEntry _entry;
 
@@ -18,9 +18,14 @@ namespace ExposureLog.ViewModels
         }
 
 
-        public DetailViewModel(ExposureLogEntry entry)
+        public DetailViewModel(INavService navService)
+            : base(navService)
         {
-            Entry = entry;
+        }
+
+        public override void Init(ExposureLogEntry paramter)
+        {
+            Entry = paramter;
         }
     }
 }

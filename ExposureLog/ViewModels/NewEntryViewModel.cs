@@ -1,5 +1,7 @@
 ﻿using ExposureLog.Models;
+using ExposureLog.Services;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ExposureLog.ViewModels
@@ -15,6 +17,7 @@ namespace ExposureLog.ViewModels
                 _title = value;
                 Validate(() => !string.IsNullOrWhiteSpace(_title), "Title must be provided.");
                 OnPropertyChanged();
+                SaveCommand.ChangeCanExecute();
             }
         }
 
@@ -77,8 +80,9 @@ namespace ExposureLog.ViewModels
 
         private Command _saveCommand;
         public Command SaveCommand =>
-            _saveCommand ?? (_saveCommand = new Command(Save, CanSave));
-        void Save()
+            _saveCommand ?? (_saveCommand = new Command(async () => await Save(), CanSave));
+        
+        async Task Save()
         {
             var newItem = new ExposureLogEntry
             {
@@ -90,14 +94,22 @@ namespace ExposureLog.ViewModels
                 Notes = Notes
             };
             // TODO: Persist entry in a later chapter
+
+            await NavService.GoBack();
         }
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
 
 
-        public NewEntryViewModel()
+        public NewEntryViewModel(INavService navService)
+            : base(navService)
         {
             Date = DateTime.Today;
             RiskRating = 1;
+        }
+
+        public override void Init()
+        {
+            
         }
     }
 }

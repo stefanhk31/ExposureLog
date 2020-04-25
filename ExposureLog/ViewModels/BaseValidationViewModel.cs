@@ -1,3 +1,4 @@
+﻿using ExposureLog.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace ExposureLog.ViewModels
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
 
-        public BaseValidationViewModel()
+        public BaseValidationViewModel(INavService navService)
+            : base(navService)
         {
         }
 

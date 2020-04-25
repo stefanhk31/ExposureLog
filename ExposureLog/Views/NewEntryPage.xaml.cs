@@ -1,4 +1,5 @@
-﻿using ExposureLog.ViewModels;
+﻿using ExposureLog.Services;
+using ExposureLog.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +20,7 @@ namespace ExposureLog.Views
         {
             InitializeComponent();
             BindingContextChanged += Page_BindingContextChanged;
-            BindingContext = new NewEntryViewModel();
+            BindingContext = new NewEntryViewModel(DependencyService.Get<INavService>());
         }
 
         private void Page_BindingContextChanged(object sender, EventArgs e)
