@@ -20,7 +20,6 @@ namespace ExposureLog.Views
         {
             InitializeComponent();
             BindingContextChanged += Page_BindingContextChanged;
-            BindingContext = new NewEntryViewModel(DependencyService.Get<INavService>());
         }
 
         private void Page_BindingContextChanged(object sender, EventArgs e)

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(NavService))]
+
 namespace ExposureLog.Services
 {
-    public class NavService  : INavService
+    public class NavService : INavService
     {
         private readonly IDictionary<Type, Type> _map = new Dictionary<Type, Type>();
 
@@ -94,6 +94,11 @@ namespace ExposureLog.Services
                                       .DeclaredConstructors
                                       .FirstOrDefault(dc => !dc.GetParameters().Any());
             var view = constructor.Invoke(null) as Page;
+            var vm = ((App)Application.Current)
+               .Kernel
+               .GetService(viewModelType);
+
+            view.BindingContext = vm;
             await Navigation.PushAsync(view, true);
         }
 

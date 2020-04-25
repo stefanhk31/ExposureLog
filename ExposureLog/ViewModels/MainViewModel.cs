@@ -24,6 +24,7 @@ namespace ExposureLog.ViewModels
         public Command NewCommand => new Command(async () =>
                 await NavService.NavigateTo<NewEntryViewModel>());
 
+
         public MainViewModel(INavService navService)
             : base(navService)
         {

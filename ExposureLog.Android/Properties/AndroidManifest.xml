@@ -5,4 +5,6 @@
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAzhTIBqvVyd2zUj_8Snm8ReJj5EB9v6P0" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

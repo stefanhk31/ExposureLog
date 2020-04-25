@@ -16,7 +16,6 @@ namespace ExposureLog.Views
         public DetailPage()
         {
             InitializeComponent();
-            BindingContext = new DetailViewModel(DependencyService.Get<INavService>());
         }
 
         protected override void OnAppearing()

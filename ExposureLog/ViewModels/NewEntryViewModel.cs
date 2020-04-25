@@ -8,6 +8,8 @@ namespace ExposureLog.ViewModels
 {
     class NewEntryViewModel : BaseValidationViewModel
     {
+        private readonly ILocationService _locService;
+
         private string _title;
         public string Title
         {
@@ -100,16 +102,27 @@ namespace ExposureLog.ViewModels
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
 
 
-        public NewEntryViewModel(INavService navService)
+        public NewEntryViewModel(INavService navService, ILocationService locService)
             : base(navService)
         {
+            _locService = locService;
+
             Date = DateTime.Today;
             RiskRating = 1;
         }
 
-        public override void Init()
+        public override async void Init()
         {
-            
+            try
+            {
+                var coords = await _locService.GetCoordinatesAsync();
+                Latitude = coords.Latitude;
+                Longitude = coords.Longitude;
+            } 
+            catch (Exception)
+            {
+                //TODO: handle exceptions from location service
+            }
         }
     }
 }

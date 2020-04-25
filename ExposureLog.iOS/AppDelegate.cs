@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using ExposureLog.iOS.Modules;
 using Foundation;
 using UIKit;
+
 
 namespace ExposureLog.iOS
 {
@@ -24,7 +22,7 @@ namespace ExposureLog.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
-            LoadApplication(new App());
+            LoadApplication(new App(new ExposureLogPlatformModule()));
 
             return base.FinishedLaunching(app, options);
         }

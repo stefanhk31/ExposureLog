@@ -34,5 +34,7 @@
 	<string>ExposureLog</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Needed to record location of exposure events.</string>
 </dict>
 </plist>
