@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ namespace ExposureLog.ViewModels
     {
         private readonly IDictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
-        public bool HasErrors => throw new NotImplementedException();
+        public bool HasErrors => _errors?.Any(x => x.Value?.Any() == true) == true;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
 
