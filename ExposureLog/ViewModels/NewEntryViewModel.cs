@@ -56,14 +56,14 @@ namespace ExposureLog.ViewModels
             }
         }
 
-        private int _riskRating;
-        public int RiskRating
+        private int _rating;
+        public int Rating
         {
-            get => _riskRating;
+            get => _rating;
             set
             {
-                _riskRating = value;
-                Validate(() => _riskRating >= 1 && _riskRating <= 5, "Risk Rating must be between 1 and 5.");
+                _rating = value;
+                Validate(() => _rating >= 1 && _rating <= 5, "Risk Rating must be between 1 and 5.");
                 OnPropertyChanged();
                 SaveCommand.ChangeCanExecute();
             }
@@ -86,18 +86,31 @@ namespace ExposureLog.ViewModels
         
         async Task Save()
         {
-            var newItem = new ExposureLogEntry
-            {
-                Title = Title,
-                Latitude = Latitude,
-                Longitude = Longitude,
-                Date = Date,
-                RiskRating = RiskRating,
-                Notes = Notes
-            };
-            // TODO: Persist entry in a later chapter
+            if (IsBusy)
+                return;
 
-            await NavService.GoBack();
+            IsBusy = true;
+            try
+            {
+                var newItem = new ExposureLogEntry
+                {
+                    Title = Title,
+                    Latitude = Latitude,
+                    Longitude = Longitude,
+                    Date = Date,
+                    Rating = Rating,
+                    Notes = Notes
+                };
+                // TODO: Persist entry in a later chapter
+
+                await Task.Delay(3000);
+                await NavService.GoBack();
+            } 
+            finally
+            {
+                IsBusy = false;
+            }
+
         }
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
 
@@ -108,7 +121,7 @@ namespace ExposureLog.ViewModels
             _locService = locService;
 
             Date = DateTime.Today;
-            RiskRating = 1;
+            Rating = 1;
         }
 
         public override async void Init()

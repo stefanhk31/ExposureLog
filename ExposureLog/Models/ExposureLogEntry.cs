@@ -8,7 +8,7 @@ namespace ExposureLog.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public DateTime Date { get; set; }
-        public int RiskRating { get; set; }
+        public int Rating { get; set; }
         public string Notes { get; set; }
     }
 }

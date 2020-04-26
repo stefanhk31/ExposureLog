@@ -9,6 +9,17 @@ namespace ExposureLog.ViewModels
     {
         protected INavService NavService { get; private set; }
 
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
 

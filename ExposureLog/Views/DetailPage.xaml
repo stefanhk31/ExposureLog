@@ -4,8 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:converters="clr-namespace:ExposureLog.Converters;assembly=ExposureLog"
              mc:Ignorable="d"
              x:Class="ExposureLog.Views.DetailPage">
+    <ContentPage.Resources>
+        <converters:RatingToStarImageNameConverter x:Key="RatingToStartImageNameConverter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -17,10 +21,18 @@
             <BoxView Grid.Row="1" BackgroundColor="White"
                 Opacity=".8" />
             <StackLayout Padding="10" Grid.Row="1">
-                <Label x:Name="title" Text="{Binding Entry.Title}" HorizontalOptions="Center" />
-                <Label x:Name="date" Text="{Binding Entry.Date}" HorizontalOptions="Center" />
-                <Label x:Name="riskRating" Text="{Binding Entry.RiskRating}" HorizontalOptions="Center" />
-                <Label x:Name="notes" Text="{Binding Entry.Notes}" HorizontalOptions="Center" />
+                <Label x:Name="title" Text="{Binding Entry.Title}" HorizontalOptions="Center" 
+                       AutomationProperties.IsInAccessibleTree="true"
+                       AutomationProperties.HelpText="Title of exposure event"/>
+                <Label x:Name="date" Text="{Binding Entry.Date}" HorizontalOptions="Center" 
+                       AutomationProperties.IsInAccessibleTree="true"
+                       AutomationProperties.HelpText="Date of exposure event" />
+                <Image HorizontalOptions="Center" Source="{Binding Entry.Rating, Converter={StaticResource RatingToStartImageNameConverter}}"
+                        AutomationProperties.IsInAccessibleTree="true"
+                       AutomationProperties.HelpText="{Binding Entry.Rating, StringFormat='{0} star risk rating'}" />
+                <Label x:Name="notes" Text="{Binding Entry.Notes}" HorizontalOptions="Center" 
+                       AutomationProperties.IsInAccessibleTree="true"
+                       AutomationProperties.HelpText="Additional notes" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

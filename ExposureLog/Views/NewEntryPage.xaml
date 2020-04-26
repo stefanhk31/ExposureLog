@@ -1,26 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ExposureLog.Controls;assembly=ExposureLog"
+             xmlns:converters="clr-namespace:ExposureLog.Converters;assembly=ExposureLog"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="ExposureLog.Views.NewEntryPage"
              Title="New Entry">
+    <ContentPage.Resources>
+        <converters:ReverseBooleanConverter x:Key="ReverseBooleanConverter" />
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <TableView Intent="Form">
-            <TableView.Root>
-                <TableSection>
-                    <EntryCell x:Name="title" Label="Title" Text="{Binding Title}"/>
-                    <EntryCell x:Name="latitude" Label="Latitude" Text="{Binding Latitude}" Keyboard="Numeric" />
-                    <EntryCell x:Name="longitude" Label="Longitude" Text="{Binding Longitude}" Keyboard="Numeric" />
-                    <EntryCell x:Name="date" Label="Date" Text="{Binding Date, StringFormat='{0:d}'}" />
-                    <EntryCell x:Name="riskRating" Label="Risk Rating" Text="{Binding RiskRating}" Keyboard="Numeric" />
-                    <EntryCell x:Name="notes" Label="Notes" Text="{Binding Notes}"/>
-                </TableSection>
-            </TableView.Root>
-        </TableView>
+        <Grid>
+            <TableView Intent="Form" IsVisible="{Binding IsBusy, Converter={StaticResource ReverseBooleanConverter}}">
+                <TableView.Root>
+                    <TableSection>
+                        <EntryCell x:Name="title" Label="Title" Text="{Binding Title}"/>
+                        <EntryCell x:Name="latitude" Label="Latitude" Text="{Binding Latitude}" Keyboard="Numeric" />
+                        <EntryCell x:Name="longitude" Label="Longitude" Text="{Binding Longitude}" Keyboard="Numeric" />
+                        <controls:DatePickerEntryCell Label="Date" Date="{Binding Date, StringFormat='{0:d}'}" />
+                        <EntryCell x:Name="rating" Label="Risk Rating" Text="{Binding Rating}" Keyboard="Numeric" />
+                        <EntryCell x:Name="notes" Label="Notes" Text="{Binding Notes}"/>
+                    </TableSection>
+                </TableView.Root>
+            </TableView>
+            <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="True" />
+                <Label Text="Saving new entry..." />
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -37,8 +37,8 @@ namespace ExposureLog.Views
                     title.LabelColor = propHasErrors
                         ? Color.Red : Color.Black;
                     break;
-                case nameof(ViewModel.RiskRating):
-                    riskRating.LabelColor = propHasErrors
+                case nameof(ViewModel.Rating):
+                    rating.LabelColor = propHasErrors
                         ? Color.Red : Color.Black;
                     break;
                 default:
