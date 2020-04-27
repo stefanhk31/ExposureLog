@@ -9,6 +9,7 @@ namespace ExposureLog.ViewModels
     class NewEntryViewModel : BaseValidationViewModel
     {
         private readonly ILocationService _locService;
+        private readonly IExposureLogDataService _exposureLogService;
 
         private string _title;
         public string Title
@@ -101,9 +102,8 @@ namespace ExposureLog.ViewModels
                     Rating = Rating,
                     Notes = Notes
                 };
-                // TODO: Persist entry in a later chapter
 
-                await Task.Delay(3000);
+                await _exposureLogService.AddEntryAsync(newItem);
                 await NavService.GoBack();
             } 
             finally
@@ -115,11 +115,11 @@ namespace ExposureLog.ViewModels
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
 
 
-        public NewEntryViewModel(INavService navService, ILocationService locService)
+        public NewEntryViewModel(INavService navService, ILocationService locService, IExposureLogDataService exposureLogService)
             : base(navService)
         {
             _locService = locService;
-
+            _exposureLogService = exposureLogService;
             Date = DateTime.Today;
             Rating = 1;
         }

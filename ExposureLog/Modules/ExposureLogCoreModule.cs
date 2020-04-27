@@ -1,6 +1,8 @@
-﻿using ExposureLog.ViewModels;
+﻿using Akavache;
+using ExposureLog.Services;
+using ExposureLog.ViewModels;
 using Ninject.Modules;
-
+using System;
 
 namespace ExposureLog.Modules
 {
@@ -11,6 +13,13 @@ namespace ExposureLog.Modules
             Bind<MainViewModel>().ToSelf();
             Bind<DetailViewModel>().ToSelf();
             Bind<NewEntryViewModel>().ToSelf();
+
+            var exposureLogService = new ExposureLogDataService(new Uri("https://exposurelog.azurewebsites.net"));
+            Bind<IExposureLogDataService>()
+                .ToMethod(x => exposureLogService)
+                .InSingletonScope();
+
+            Bind<IBlobCache>().ToConstant(BlobCache.LocalMachine);
         }
     }
 }

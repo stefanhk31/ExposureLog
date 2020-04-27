@@ -1,7 +1,9 @@
-﻿using ExposureLog.Models;
+﻿using Akavache;
+using ExposureLog.Models;
 using ExposureLog.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -9,6 +11,9 @@ namespace ExposureLog.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        private readonly IExposureLogDataService _exposureLogService;
+        private readonly IBlobCache _cache;
+
         private ObservableCollection<ExposureLogEntry> _logEntries;
         public ObservableCollection<ExposureLogEntry> LogEntries
         {
@@ -28,9 +33,11 @@ namespace ExposureLog.ViewModels
         private Command _refreshCommand;
         public Command RefreshCommand => _refreshCommand ?? (_refreshCommand = new Command(LoadEntries));
 
-        public MainViewModel(INavService navService)
+        public MainViewModel(INavService navService, IExposureLogDataService exposureLogService, IBlobCache cache)
             : base(navService)
         {
+            _exposureLogService = exposureLogService;
+            _cache = cache;
             LogEntries = new ObservableCollection<ExposureLogEntry>();
         }
 
@@ -39,46 +46,26 @@ namespace ExposureLog.ViewModels
             LoadEntries();
         }
 
-        private void LoadEntries()
+        private async void LoadEntries()
         {
             if (IsBusy)
                 return;
 
             IsBusy = true;
-            LogEntries.Clear();
-            //TODO: Remove this Task.Delay when connected to API service
-            Task.Delay(3000).ContinueWith(_ => Device.BeginInvokeOnMainThread(() =>
+            try
             {
-
-                LogEntries.Add(new ExposureLogEntry
-                {
-                    Title = "Grocery Store",
-                    Notes = "Packed with lots of people, difficult to keep distance.",
-                    Rating = 5,
-                    Date = new DateTime(2020, 3, 13),
-                    Latitude = 36.032667,
-                    Longitude = -83.931597
-                });
-                LogEntries.Add(new ExposureLogEntry
-                {
-                    Title = "Park",
-                    Notes = "Only a few other walkers/joggers. One jogger passed more closely than I would've liked.",
-                    Rating = 2,
-                    Date = new DateTime(2020, 3, 21),
-                    Latitude = 35.974322,
-                    Longitude = -83.860789
-                });
-                LogEntries.Add(new ExposureLogEntry
-                {
-                    Title = "Curbside Pickup from Brewery",
-                    Notes = "Only interacted with one employee, who was wearing gloves.",
-                    Rating = 1,
-                    Date = new DateTime(2020, 4, 11),
-                    Latitude = 35.990462,
-                    Longitude = -83.940735
-                });
+                 _cache.GetAndFetchLatest("entries", async () => await _exposureLogService.GetEntriesAsync())
+                    .Subscribe(entries =>
+                    {
+                        LogEntries = new ObservableCollection<ExposureLogEntry>(entries);
+                    });
+            }
+            finally
+            {
                 IsBusy = false;
-            }));
+            }
         }
     }
 }
+
+
