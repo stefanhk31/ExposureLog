@@ -46,7 +46,7 @@ namespace ExposureLog.ViewModels
             LoadEntries();
         }
 
-        private async void LoadEntries()
+        private void LoadEntries()
         {
             if (IsBusy)
                 return;
