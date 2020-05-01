@@ -20,6 +20,8 @@ namespace ExposureLog.Modules
                 .InSingletonScope();
 
             Bind<IBlobCache>().ToConstant(BlobCache.LocalMachine);
+
+            Bind<IAuthService>().To<AuthService>().InSingletonScope();
         }
     }
 }

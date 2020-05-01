@@ -1,4 +1,5 @@
 ﻿using ExposureLog.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,16 +10,40 @@ namespace ExposureLog.Services
 {
     public class ExposureLogDataService : BaseHttpService, IExposureLogDataService
     {
-        readonly Uri _baseUri;
-        readonly IDictionary<string, string> _headers;
+        private readonly Uri _baseUri;
+        private readonly IDictionary<string, string> _headers;
+
+        private struct IdProviderToken
+        {
+            [JsonProperty("access_token")]
+            public string AccessToken { get; set; }
+        }
+
+        public Action<string> AuthorizedDelegate { get; set; }
 
 
-        public ExposureLogDataService(Uri baseUri)
+        public ExposureLogDataService(Uri baseUri, string authToken)
         {
             _baseUri = baseUri;
             _headers = new Dictionary<string, string>();
-            // TODO: Add header with auth-based token in chapter 7
+            _headers.Add("x-zumo-auth", authToken);
+        }
 
+
+        public async Task AuthenticateAsync(string idProvider, string idProviderToken)
+        {
+            var token = new IdProviderToken
+            {
+                AccessToken = idProviderToken
+            };
+            var url = new Uri(_baseUri, string.Format(".auth/login/{0}", idProvider));
+            var response = await SendRequestAsync<ExposureLogApiAuthToken>(url, HttpMethod.Post, requestData: token);
+            if (!string.IsNullOrWhiteSpace(response?.AuthenticationToken))
+            {
+                var authToken = response.AuthenticationToken;
+                _headers["x-zumo-auth"] = authToken;
+                AuthorizedDelegate?.Invoke(authToken);
+            }
         }
 
         public async Task<IList<ExposureLogEntry>> GetEntriesAsync()
