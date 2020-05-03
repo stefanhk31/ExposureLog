@@ -1,9 +1,9 @@
-﻿using ExposureLog.Models;
+using ExposureLog.Models;
 using ExposureLog.Services;
 
 namespace ExposureLog.ViewModels
 {
-    class DetailViewModel : BaseViewModel<ExposureLogEntry>
+    public class DetailViewModel : BaseViewModel<ExposureLogEntry>
     {
         private ExposureLogEntry _entry;
 

@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace ExposureLog.ViewModels
 {
-    class SignInViewModel : BaseViewModel
+    public class SignInViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
         private readonly IExposureLogDataService _exposureLogService;

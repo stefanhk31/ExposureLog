@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace ExposureLog.ViewModels
 {
-    class NewEntryViewModel : BaseValidationViewModel
+    public class NewEntryViewModel : BaseValidationViewModel
     {
         private readonly ILocationService _locService;
         private readonly IExposureLogDataService _exposureLogService;

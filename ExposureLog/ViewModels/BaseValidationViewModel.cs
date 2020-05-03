@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace ExposureLog.ViewModels
 {
-    class BaseValidationViewModel : BaseViewModel, INotifyDataErrorInfo
+    public class BaseValidationViewModel : BaseViewModel, INotifyDataErrorInfo
     {
         private readonly IDictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
