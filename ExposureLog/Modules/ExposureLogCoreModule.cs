@@ -22,9 +22,16 @@ namespace ExposureLog.Modules
                 .ToMethod(x => exposureLogService)
                 .InSingletonScope();
 
-            Bind<IBlobCache>().ToConstant(BlobCache.LocalMachine);
+            Bind<IBlobCache>()
+                .ToConstant(BlobCache.LocalMachine);
 
-            Bind<IAuthService>().To<AuthService>().InSingletonScope();
+            Bind<IAuthService>()
+                .To<AuthService>()
+                .InSingletonScope();
+
+            Bind<IAnalyticsService>()
+                .To<AppCenterAnalyticsService>()
+                .InSingletonScope();
         }
     }
 }

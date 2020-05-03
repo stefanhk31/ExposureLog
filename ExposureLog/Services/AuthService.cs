@@ -6,7 +6,7 @@ namespace ExposureLog.Services
 {
     class AuthService : IAuthService
     {
-        public void SignInAsync(string clientId, Uri authUrl, Uri callbackUrl, Action<string> tokenCallback, Action<string> errorCallback)
+        public void SignInAsync(string clientId, Uri authUrl, Uri callbackUrl, Action<string> tokenCallback, Action<Exception> errorCallback)
         {
             var presenter = new OAuthLoginPresenter();
             var authenticator = new OAuth2Authenticator(clientId, "", authUrl, callbackUrl);
@@ -18,12 +18,12 @@ namespace ExposureLog.Services
                 }
                 else
                 {
-                    errorCallback?.Invoke("Not authenticated");
+                    errorCallback?.Invoke(new UnauthorizedAccessException("Not authenticated."));
                 }
             };
             authenticator.Error += (sender, args) =>
             {
-                errorCallback?.Invoke(args.Message);
+                errorCallback?.Invoke(args.Exception);
             };
             presenter.Login(authenticator);
         }

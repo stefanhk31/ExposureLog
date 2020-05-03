@@ -12,6 +12,7 @@ namespace ExposureLog.Tests.ViewModels
     {
         private NewEntryViewModel _vm;
         private Mock<INavService> _navMock;
+        private Mock<IAnalyticsService> _analyticsMock;
         private Mock<IExposureLogDataService> _dataMock;
         private Mock<ILocationService> _locMock;
 
@@ -19,6 +20,7 @@ namespace ExposureLog.Tests.ViewModels
         public void Setup()
         {
             _navMock = new Mock<INavService>();
+            _analyticsMock = new Mock<IAnalyticsService>();
             _dataMock = new Mock<IExposureLogDataService>();
             _locMock = new Mock<ILocationService>();
 
@@ -32,7 +34,7 @@ namespace ExposureLog.Tests.ViewModels
                     Latitude = 123,
                     Longitude = 321
                 });
-            _vm = new NewEntryViewModel(_navMock.Object, _locMock.Object, _dataMock.Object);
+            _vm = new NewEntryViewModel(_navMock.Object, _analyticsMock.Object, _locMock.Object, _dataMock.Object);
         }
 
         [Test]

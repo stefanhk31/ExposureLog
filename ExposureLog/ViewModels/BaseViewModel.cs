@@ -8,6 +8,7 @@ namespace ExposureLog.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         protected INavService NavService { get; private set; }
+        protected IAnalyticsService AnalyticsService { get; private set; }
 
         private bool _isBusy;
         public bool IsBusy
@@ -23,9 +24,10 @@ namespace ExposureLog.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-        protected BaseViewModel(INavService navService )
+        protected BaseViewModel(INavService navService, IAnalyticsService analyticsService)
         {
             NavService = navService;
+            AnalyticsService = analyticsService;
         }
 
         public virtual void Init()
@@ -41,15 +43,12 @@ namespace ExposureLog.ViewModels
 
     public class BaseViewModel<TParameter> : BaseViewModel
     {
-        protected BaseViewModel(INavService navService)
-            : base(navService)
-        {
-
-        }
+        protected BaseViewModel(INavService navService, IAnalyticsService analyticsService)
+            : base(navService, analyticsService) {}
 
         public override void Init()
         {
-            Init(default(TParameter));
+            Init(default);
         }
 
         public virtual void Init(TParameter parameter)

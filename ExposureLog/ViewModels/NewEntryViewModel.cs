@@ -1,6 +1,7 @@
 ﻿using ExposureLog.Models;
 using ExposureLog.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -115,8 +116,8 @@ namespace ExposureLog.ViewModels
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
 
 
-        public NewEntryViewModel(INavService navService, ILocationService locService, IExposureLogDataService exposureLogService)
-            : base(navService)
+        public NewEntryViewModel(INavService navService, IAnalyticsService analyticsService, ILocationService locService, IExposureLogDataService exposureLogService)
+            : base(navService, analyticsService)
         {
             _locService = locService;
             _exposureLogService = exposureLogService;
@@ -132,9 +133,12 @@ namespace ExposureLog.ViewModels
                 Latitude = coords.Latitude;
                 Longitude = coords.Longitude;
             } 
-            catch (Exception)
+            catch (Exception e)
             {
-                //TODO: handle exceptions from location service
+                AnalyticsService.TrackError(e, new Dictionary<string, string>
+                {
+                    { "Method", "NewEntryViewModel.Init()"}
+                });
             }
         }
     }

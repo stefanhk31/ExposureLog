@@ -2,6 +2,7 @@
 using ExposureLog.Models;
 using ExposureLog.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,8 +36,8 @@ namespace ExposureLog.ViewModels
 
         public Command SignOutCommand => new Command(_exposureLogService.Unauthenticate);
 
-        public MainViewModel(INavService navService, IExposureLogDataService exposureLogService, IBlobCache cache)
-            : base(navService)
+        public MainViewModel(INavService navService, IAnalyticsService analyticsService, IExposureLogDataService exposureLogService, IBlobCache cache)
+            : base(navService, analyticsService)
         {
             _exposureLogService = exposureLogService;
             _cache = cache;
@@ -61,6 +62,13 @@ namespace ExposureLog.ViewModels
                     {
                         LogEntries = new ObservableCollection<ExposureLogEntry>(entries);
                     });
+            }
+            catch (Exception e)
+            {
+                AnalyticsService.TrackError(e, new Dictionary<string, string>
+                {
+                    { "Method", "MainViewModel.LoadEntries()"}
+                }); 
             }
             finally
             {

@@ -1,5 +1,6 @@
 ﻿using ExposureLog.Models;
 using ExposureLog.Services;
+using System.Collections.Generic;
 
 namespace ExposureLog.ViewModels
 {
@@ -18,8 +19,8 @@ namespace ExposureLog.ViewModels
         }
 
 
-        public DetailViewModel(INavService navService)
-            : base(navService)
+        public DetailViewModel(INavService navService, IAnalyticsService analyticsService)
+            : base(navService, analyticsService)
         {
         }
 
@@ -28,9 +29,13 @@ namespace ExposureLog.ViewModels
             throw new EntryNotProvidedException();
         }
 
-        public override void Init(ExposureLogEntry paramter)
+        public override void Init(ExposureLogEntry parameter)
         {
-            Entry = paramter;
+            AnalyticsService.TrackEvent("Entry Detail Page", new Dictionary<string, string>
+                {
+                    { "Title", parameter.Title }
+                });
+            Entry = parameter;
         }
     }
 }

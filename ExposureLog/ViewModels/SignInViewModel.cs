@@ -1,5 +1,6 @@
 ﻿using ExposureLog.Services;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace ExposureLog.ViewModels
@@ -13,8 +14,8 @@ namespace ExposureLog.ViewModels
         public Command SignInCommand => _signInCommand ?? (_signInCommand = new Command(SignIn));
 
 
-        public SignInViewModel(INavService navService, IAuthService authService, IExposureLogDataService exposureLogService)
-            : base(navService)
+        public SignInViewModel(INavService navService, IAnalyticsService analyticsService, IAuthService authService, IExposureLogDataService exposureLogService)
+            : base(navService, analyticsService)
         {
             _authService = authService;
             _exposureLogService = exposureLogService;
@@ -31,7 +32,10 @@ namespace ExposureLog.ViewModels
                 },
                 errorCallback: e =>
                 {
-                    // TODO: Handle invalid authentication here
+                    AnalyticsService.TrackError(e, new Dictionary<string, string>
+                        {
+                            { "Method", "SignInViewModel.SignIn()"}
+                        });
                 });
         }
     }

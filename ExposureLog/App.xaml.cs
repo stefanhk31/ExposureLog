@@ -4,9 +4,11 @@ using ExposureLog.ViewModels;
 using ExposureLog.Views;
 using Ninject;
 using Ninject.Modules;
-using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 
 namespace ExposureLog
@@ -36,6 +38,9 @@ namespace ExposureLog
 
         protected override void OnStart()
         {
+            AppCenter.Start("ios=d26fd9d2-22fd-4a6b-bd0d-215d76a9f101;"
+                + "android=873ec2fd-01a2-4e02-a8a5-2a7a90409168;", 
+                typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()
