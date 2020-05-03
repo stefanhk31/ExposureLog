@@ -33,6 +33,8 @@ namespace ExposureLog.ViewModels
         private Command _refreshCommand;
         public Command RefreshCommand => _refreshCommand ?? (_refreshCommand = new Command(LoadEntries));
 
+        public Command SignOutCommand => new Command(_exposureLogService.Unauthenticate);
+
         public MainViewModel(INavService navService, IExposureLogDataService exposureLogService, IBlobCache cache)
             : base(navService)
         {

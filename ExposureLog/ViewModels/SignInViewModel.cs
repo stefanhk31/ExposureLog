@@ -22,12 +22,12 @@ namespace ExposureLog.ViewModels
 
         private void SignIn()
         {
-            _authService.SignInAsync("479446455977-gbj7dts7tqm05kc3lhkrt24th3qu71cg.apps.googleusercontent.com",
-                new Uri("https://accounts.google.com/o/oauth2/v2/auth"),
-                new Uri("https://exposurelog.azurewebsites.net/.auth/login/google/callback"),
+            _authService.SignInAsync("897391277398859",
+                new Uri("https://m.facebook.com/dialog/oauth"),
+                new Uri("https://exposurelog.azurewebsites.net/.auth/login/facebook/callback"),
                 tokenCallback: async token =>
                 {
-                    await _exposureLogService.AuthenticateAsync("google", token);
+                    await _exposureLogService.AuthenticateAsync("facebook", token);
                 },
                 errorCallback: e =>
                 {

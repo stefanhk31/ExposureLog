@@ -20,6 +20,7 @@ namespace ExposureLog.Services
         }
 
         public Action<string> AuthorizedDelegate { get; set; }
+        public Action UnauthorizedDelegate { get; set; }
 
 
         public ExposureLogDataService(Uri baseUri, string authToken)
@@ -28,7 +29,6 @@ namespace ExposureLog.Services
             _headers = new Dictionary<string, string>();
             _headers.Add("x-zumo-auth", authToken);
         }
-
 
         public async Task AuthenticateAsync(string idProvider, string idProviderToken)
         {
@@ -46,18 +46,36 @@ namespace ExposureLog.Services
             }
         }
 
+        public void Unauthenticate() => UnauthorizedDelegate?.Invoke();
+
         public async Task<IList<ExposureLogEntry>> GetEntriesAsync()
         {
-            var url = new Uri(_baseUri, "/api/entry");
-            var response = await SendRequestAsync<ExposureLogEntry[]>(url, HttpMethod.Get, _headers);
-            return response;
+            try
+            {
+                var url = new Uri(_baseUri, "/api/entry");
+                var response = await SendRequestAsync<ExposureLogEntry[]>(url, HttpMethod.Get, _headers);
+                return response;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                UnauthorizedDelegate?.Invoke();
+                throw;
+            }
         }
 
         public async Task<ExposureLogEntry> AddEntryAsync(ExposureLogEntry entry)
         {
-            var url = new Uri(_baseUri, "/api/entry");
-            var response = await SendRequestAsync<ExposureLogEntry>(url, HttpMethod.Post, _headers, entry);
-            return response;
+            try
+            {
+                var url = new Uri(_baseUri, "/api/entry");
+                var response = await SendRequestAsync<ExposureLogEntry>(url, HttpMethod.Post, _headers, entry);
+                return response;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                UnauthorizedDelegate?.Invoke();
+                throw;
+            }
         }
     }
 }

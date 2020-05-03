@@ -29,6 +29,7 @@ namespace ExposureLog
 
             var dataService = Kernel.Get<IExposureLogDataService>();
             dataService.AuthorizedDelegate = OnSignIn;
+            dataService.UnauthorizedDelegate = SignOut;
 
             SetMainPage();
         }
@@ -44,8 +45,6 @@ namespace ExposureLog
         protected override void OnResume()
         {
         }
-
-
 
         private void SetMainPage()
         {
@@ -66,6 +65,12 @@ namespace ExposureLog
         private void OnSignIn(string accessToken)
         {
             Preferences.Set("apitoken", accessToken);
+            SetMainPage();
+        }
+
+        private void SignOut()
+        {
+            Preferences.Remove("apitoken");
             SetMainPage();
         }
     }

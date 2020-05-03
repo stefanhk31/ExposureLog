@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="ExposureLog.Views.SignInPage">
     <ContentPage.Content>
-        <Button Text="Sign in with Google"
+        <Button Text="Sign in with Facebook"
             Command="{Binding SignInCommand}"
             BackgroundColor="#455c9f"
             TextColor="White"
