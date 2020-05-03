@@ -38,8 +38,8 @@ namespace ExposureLog
 
         protected override void OnStart()
         {
-            AppCenter.Start("ios=d26fd9d2-22fd-4a6b-bd0d-215d76a9f101;"
-                + "android=873ec2fd-01a2-4e02-a8a5-2a7a90409168;", 
+            AppCenter.Start($"ios={Constants.appCenterSecretiOS};"
+                + $"android={Constants.appCenterSecretAndroid}", 
                 typeof(Analytics), typeof(Crashes));
         }
 

@@ -23,9 +23,9 @@ namespace ExposureLog.ViewModels
 
         private void SignIn()
         {
-            _authService.SignInAsync("897391277398859",
-                new Uri("https://m.facebook.com/dialog/oauth"),
-                new Uri("https://exposurelog.azurewebsites.net/.auth/login/facebook/callback"),
+            _authService.SignInAsync(Constants.facebookAppKey,
+                new Uri(Constants.facebookAuthUrl),
+                new Uri(Constants.facebookCallbackUrl),
                 tokenCallback: async token =>
                 {
                     await _exposureLogService.AuthenticateAsync("facebook", token);
