@@ -1,4 +1,4 @@
-using ExposureLog.Models;
+﻿using ExposureLog.Models;
 using ExposureLog.Services;
 
 namespace ExposureLog.ViewModels
@@ -21,6 +21,11 @@ namespace ExposureLog.ViewModels
         public DetailViewModel(INavService navService)
             : base(navService)
         {
+        }
+
+        public override void Init()
+        {
+            throw new EntryNotProvidedException();
         }
 
         public override void Init(ExposureLogEntry paramter)
