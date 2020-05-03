@@ -5,6 +5,7 @@ using ExposureLog.Views;
 using Ninject;
 using Ninject.Modules;
 using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 
@@ -12,6 +13,8 @@ namespace ExposureLog
 {
     public partial class App : Application
     {
+        private bool IsSignedIn => !string.IsNullOrWhiteSpace(Preferences.Get("apitoken", ""));
+
         public IKernel Kernel { get; set; }
 
 
@@ -24,18 +27,10 @@ namespace ExposureLog
                 new ExposureLogNavModule());
             Kernel.Load(platformModules);
 
-            SetMainPage();
-        }
+            var dataService = Kernel.Get<IExposureLogDataService>();
+            dataService.AuthorizedDelegate = OnSignIn;
 
-        private void SetMainPage()
-        {
-            var mainPage = new NavigationPage(new MainPage())
-            {
-                BindingContext = Kernel.Get<MainViewModel>()
-            };
-            var navService = Kernel.Get<INavService>() as NavService;
-            navService.Navigation = mainPage.Navigation;
-            MainPage = mainPage;
+            SetMainPage();
         }
 
         protected override void OnStart()
@@ -48,6 +43,30 @@ namespace ExposureLog
 
         protected override void OnResume()
         {
+        }
+
+
+
+        private void SetMainPage()
+        {
+            var mainPage = IsSignedIn
+                ? new NavigationPage(new MainPage())
+                {
+                    BindingContext = Kernel.Get<MainViewModel>()
+                }
+                : new NavigationPage(new SignInPage())
+                {
+                    BindingContext = Kernel.Get<SignInViewModel>()
+                };
+            var navService = Kernel.Get<INavService>() as NavService;
+            navService.Navigation = mainPage.Navigation;
+            MainPage = mainPage;
+        }
+
+        private void OnSignIn(string accessToken)
+        {
+            Preferences.Set("apitoken", accessToken);
+            SetMainPage();
         }
     }
 }
