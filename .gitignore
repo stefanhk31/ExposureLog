@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 ExposureLog.Android/Properties/AndroidManifest.xml
+ExposureLog/Constants.cs
